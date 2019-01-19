@@ -20,27 +20,36 @@ public class AutoDriveForward extends PIDCommand {
   public AutoDriveForward(double distance) {
     super(1,0,0);
     requires(Robot.drivetrain);
+
+    getPIDController().setAbsoluteTolerance(0.1);
+    getPIDController().setSetpoint(distance);
+
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    super.initialize();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    getPIDController().enable();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return getPIDController().onTarget();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.drivetrain.stopDrive();
+    getPIDController().disable();
+    super.end();
   }
 
   @Override

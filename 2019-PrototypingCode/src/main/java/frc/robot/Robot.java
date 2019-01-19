@@ -8,6 +8,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,6 +33,8 @@ public class Robot extends TimedRobot {
 
   public static OI oi;
 
+  public SendableChooser<Command> autoChooser;
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -47,6 +50,11 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
 
     oi = new OI();
+
+    autoChooser = new SendableChooser<>();
+    autoChooser.addDefault("Drive forward 6 feet", new Auto4Rotations(74));
+    
+    SmartDashboard.putData(autoChooser);
 
   
   }
@@ -84,6 +92,10 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
+  
+    drivetrain.resetEncoders();
+    autoChooser.getSelected().start();
+  
   }
 
   /**
@@ -91,14 +103,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
+    Scheduler.getInstance().run();
     }
   }
 
