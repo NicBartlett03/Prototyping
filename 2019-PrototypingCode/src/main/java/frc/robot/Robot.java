@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSink;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -33,6 +36,10 @@ public class Robot extends TimedRobot {
 
   public static OI oi;
 
+  public static UsbCamera frontCamera;
+	public static UsbCamera backCamera;
+	public static VideoSink cameraServer;
+
   public SendableChooser<Command> autoChooser;
 
 
@@ -55,6 +62,14 @@ public class Robot extends TimedRobot {
     autoChooser.addDefault("Drive forward 6 feet", new Auto4Rotations(74));
     
     SmartDashboard.putData(autoChooser);
+
+    frontCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.frontCamera);
+		frontCamera.setResolution(40, 40);
+		frontCamera.setExposureAuto();
+		backCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.backCamera);
+		backCamera.setResolution(40, 40);
+		backCamera.setExposureAuto();
+		cameraServer = CameraServer.getInstance().getServer();
 
   
   }
