@@ -27,11 +27,11 @@ public class OI {
         Button pilotButtonA = new JoystickButton(pilotController, RobotMap.joystickButtonA);
         pilotButtonA.whileHeld(new DownIntake());
         
-        Button pilotButtonB = new JoystickButton(pilotController, RobotMap.joystickButtonB);
-        pilotButtonB.whileHeld(new UpIntake());
-        
         Button pilotButtonY = new JoystickButton(pilotController, RobotMap.joystickButtonY);
-		pilotButtonY.whenPressed(new TimedGearbox());
+        pilotButtonY.whileHeld(new UpIntake());
+        
+        Button pilotButtonB = new JoystickButton(pilotController, RobotMap.joystickButtonB);
+		pilotButtonB.whenPressed(new TimedGearbox());
     
     }
 
