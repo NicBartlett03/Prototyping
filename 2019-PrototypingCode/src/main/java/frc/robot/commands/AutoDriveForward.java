@@ -39,7 +39,7 @@ public class AutoDriveForward extends PIDCommand {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return getPIDController().onTarget()
+    return getPIDController().onTarget();
   }
 
   // Called once after isFinished returns true

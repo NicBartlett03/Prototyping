@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -33,9 +34,13 @@ public class OI {
         Button pilotButtonB = new JoystickButton(pilotController, RobotMap.joystickButtonB);
 		pilotButtonB.whenPressed(new TimedGearbox());
     
+        pilotButtonA.close();
+        pilotButtonY.close();
+        pilotButtonB.close();
     }
 
     public Joystick getPilotController() {
         return pilotController;
+
     }
 }
