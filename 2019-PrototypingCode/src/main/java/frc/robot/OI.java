@@ -7,12 +7,12 @@
 
 package frc.robot;
 
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.CloseBeak;
 import frc.robot.commands.DownIntake;
-import frc.robot.commands.TimedGearbox;
+import frc.robot.commands.OpenBeak;
 import frc.robot.commands.UpIntake;
 
 /**
@@ -32,8 +32,11 @@ public class OI {
         pilotButtonY.whileHeld(new UpIntake());
         
         Button pilotButtonB = new JoystickButton(pilotController, RobotMap.joystickButtonB);
-		pilotButtonB.whenPressed(new TimedGearbox());
-    
+        pilotButtonB.whenPressed(new OpenBeak());
+        pilotButtonB.whenReleased(new CloseBeak());
+
+        
+        
         pilotButtonA.close();
         pilotButtonY.close();
         pilotButtonB.close();
@@ -41,6 +44,5 @@ public class OI {
 
     public Joystick getPilotController() {
         return pilotController;
-
     }
 }
