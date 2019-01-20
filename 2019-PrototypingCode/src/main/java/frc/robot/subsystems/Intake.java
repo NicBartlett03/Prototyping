@@ -27,7 +27,7 @@ public class Intake extends Subsystem {
   }
 
   public void intakeUp() {
-    Robot.intake.intakeMotor.set(-.5);
+    Robot.intake.intakeMotor.set(-.8);
   }
 
   public void intakeDown() {
