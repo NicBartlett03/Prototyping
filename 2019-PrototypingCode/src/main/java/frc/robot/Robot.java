@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.AutoDriveForward;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
 
@@ -59,7 +60,7 @@ public class Robot extends TimedRobot {
     oi = new OI();
 
     autoChooser = new SendableChooser<>();
-    autoChooser.addDefault("Drive forward 6 feet", new Auto4Rotations(74));
+    autoChooser.setDefaultOption("Drive forward 6 feet", new AutoDriveForward(74));
     
     SmartDashboard.putData(autoChooser);
 
@@ -120,7 +121,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
     }
-  }
+  
 
   /**
    * This function is called periodically during operator control.
