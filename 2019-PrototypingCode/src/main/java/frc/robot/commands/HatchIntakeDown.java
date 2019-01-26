@@ -13,11 +13,11 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class DownIntake extends TimedCommand {
+public class HatchIntakeDown extends TimedCommand {
   
   private static double time = 3;
 
-  public DownIntake() {
+  public HatchIntakeDown() {
     super(time);
     
   }

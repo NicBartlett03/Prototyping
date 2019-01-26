@@ -10,9 +10,12 @@ package frc.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.vision.VisionPipeline;
+import edu.wpi.first.vision.VisionThread;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveForward;
@@ -66,7 +69,11 @@ public class Robot extends TimedRobot {
 		backCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.backCamera);
 		backCamera.setResolution(40, 40);
 		backCamera.setExposureAuto();
-		cameraServer = CameraServer.getInstance().getServer();
+    cameraServer = CameraServer.getInstance().getServer();
+    
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+        
+        
 
   
   }
