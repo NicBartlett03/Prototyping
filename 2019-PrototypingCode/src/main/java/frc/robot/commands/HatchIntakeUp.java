@@ -27,7 +27,7 @@ public class HatchIntakeUp extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.intake.intakeMotor.set(.8);
+    Robot.hatchIntake.intakeUp();
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -39,7 +39,7 @@ public class HatchIntakeUp extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.intake.intakeStop();
+    Robot.hatchIntake.intakeStop();
 
   }
 
