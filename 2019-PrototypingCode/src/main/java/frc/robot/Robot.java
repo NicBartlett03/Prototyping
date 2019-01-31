@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveForward;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.HatchIntake;
+import frc.robot.subsystems.IntakeExtender;
 
 
 /**
@@ -31,6 +32,7 @@ public class Robot extends TimedRobot {
 
   public static HatchIntake hatchIntake;
   public static Drivetrain drivetrain;
+  public static IntakeExtender intakeExtender;
 
   public static OI oi;
 
@@ -52,6 +54,8 @@ public class Robot extends TimedRobot {
     drivetrain = new Drivetrain();
 
     oi = new OI();
+
+    intakeExtender = new IntakeExtender();
 
     autoChooser = new SendableChooser<>();
 

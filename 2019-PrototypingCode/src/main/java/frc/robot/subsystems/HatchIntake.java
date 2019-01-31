@@ -20,7 +20,6 @@ public class HatchIntake extends Subsystem {
   
   public WPI_TalonSRX hatchIntakeMotor = new WPI_TalonSRX(RobotMap.hatchIntakeMotor);
 
-
   @Override
   public void initDefaultCommand() {
    
