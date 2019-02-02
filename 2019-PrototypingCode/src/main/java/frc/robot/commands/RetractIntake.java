@@ -10,16 +10,18 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import frc.robot.Robot;
 
-public class ExtendIntake extends PIDCommand {
-
+public class RetractIntake extends PIDCommand {
+  
   private double currentIntakeRotations;
+  
+  public RetractIntake(double intakeRotations) {
+    super(1,0,0);
+    requires(Robot.intakeExtender);
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    getPIDController().setAbsoluteTolerance(0.1);
+    getPIDController().setSetpoint(intakeRotations);
 
-  public ExtendIntake(double intakeRotations) {
-   super(1, 0, 0);
-   requires(Robot.intakeExtender);
-    	
-    	getPIDController().setAbsoluteTolerance(.1);
-    	getPIDController().setSetpoint(intakeRotations);
   }
 
   // Called just before this Command runs the first time
@@ -45,22 +47,24 @@ public class ExtendIntake extends PIDCommand {
   protected void end() {
     Robot.intakeExtender.stopExtension();
   }
-
-  // Called when another command which requires one or more of the same
-  // subsystems is scheduled to run
-  @Override
-  protected void interrupted() {
-    end();
-  }
-
+  
   @Override
   protected double returnPIDInput() {
-    currentIntakeRotations = Robot.intakeExtender.getExtenderEncoderPosition()/4096;
+    currentIntakeRotations = Robot.intakeExtender.getExtenderEncoderPosition() / 4096;
     return currentIntakeRotations;
   }
 
   @Override
   protected void usePIDOutput(double output) {
     Robot.intakeExtender.hatchIntakeExtensionMotor.set(output);
+  }
+
+
+
+  // Called when another command which requires one or more of the same
+  // subsystems is scheduled to run
+  @Override
+  protected void interrupted() {
+    end();
   }
 }
