@@ -7,9 +7,12 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.CvSink;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.vision.VisionThread;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -18,6 +21,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveForward;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.Intake;
+
+import frc.robot.GripPipeline;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -39,6 +44,8 @@ public class Robot extends TimedRobot {
 
   public SendableChooser<Command> autoChooser;
 
+  public NetworkTable networkTable; 
+
 
   /**
    * This function is run when the robot is first started up and should be
@@ -46,6 +53,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+
+
+    UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+    camera.setResolution(297, 219);
+
+    CvSink sink = CameraServer.getInstance().getVideo();
 
     intake = new Intake();
     drivetrain = new Drivetrain();

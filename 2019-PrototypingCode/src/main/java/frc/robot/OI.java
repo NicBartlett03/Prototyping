@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.DownIntake;
+import frc.robot.commands.Drivetrain30;
 import frc.robot.commands.UpIntake;
 
 /**
@@ -28,6 +29,9 @@ public class OI {
         
         Button pilotButtonY = new JoystickButton(pilotController, RobotMap.joystickButtonY);
         pilotButtonY.whenPressed(new UpIntake());
+
+        Button pilotButtonX = new JoystickButton(pilotController, RobotMap.joystickButtonX);
+        pilotButtonX.whenPressed(new Drivetrain30(3));
         
 
         
