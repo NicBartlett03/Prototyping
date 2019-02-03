@@ -22,9 +22,11 @@ import frc.robot.commands.RetractIntake;
 public class OI {
 
     private Joystick pilotController;
+    private Joystick coPilotController;
 
     public OI() {
         pilotController = new Joystick(0);
+        coPilotController = new Joystick(1);
     
         Button pilotButtonA = new JoystickButton(pilotController, RobotMap.joystickButtonA);
         pilotButtonA.whenPressed(new HatchIntakeDown());
@@ -50,5 +52,8 @@ public class OI {
 
     public Joystick getPilotController() {
         return pilotController;
+    }
+    public Joystick getcoPilotController() {
+        return coPilotController;
     }
 }
