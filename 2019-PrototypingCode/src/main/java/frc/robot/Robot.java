@@ -7,9 +7,17 @@
 
 package frc.robot;
 
+import org.opencv.core.Rect;
+import org.opencv.imgproc.Imgproc;
+
+import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.vision.VisionThread;
+import edu.wpi.first.vision.VisionRunner;
+import edu.wpi.first.vision.VisionPipeline;
+import edu.wpi.first.wpilibj.vision.*;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -20,6 +28,8 @@ import frc.robot.subsystems.CargoIntake;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.HatchIntake;
 import frc.robot.subsystems.IntakeExtender;
+
+import frc.robot.VisionPipe;
 
 
 /**
@@ -44,21 +54,27 @@ public class Robot extends TimedRobot {
 
   public SendableChooser<Command> autoChooser;
 
+  public static final int IMG_WIDTH = 320;
+  public static final int IMG_HIEGHT = 240;
+  public double centerX = 0; 
+  public boolean prevTrigger = false;
+
+  public final Object imgLock = new Object();
+
 
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
+
   @Override
-  public void robotInit() {
+  public void robotInit(){
+
 
     hatchIntake = new HatchIntake();
     drivetrain = new Drivetrain();
     intakeExtender = new IntakeExtender();
     cargoIntake = new CargoIntake();
-
-    oi = new OI();
-
     autoChooser = new SendableChooser<>();
 
     autoChooser.setDefaultOption("Drive forward 6 feet", new AutoDriveForward(74));
@@ -68,12 +84,18 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(autoChooser);
 
     frontCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.frontCamera);
-		frontCamera.setResolution(40, 40);
-		frontCamera.setExposureAuto();
-		backCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.backCamera);
-		backCamera.setResolution(40, 40);
+		frontCamera.setResolution(IMG_WIDTH, IMG_HIEGHT);
+    frontCamera.setExposureAuto();
+
+    MjpegServer mj = new MjpegServer("Camera1", 7072);
+    mj.setSource(frontCamera);
+    
+    backCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.backCamera);
+		backCamera.setResolution(IMG_WIDTH, IMG_HIEGHT);
 		backCamera.setExposureAuto();
-		cameraServer = CameraServer.getInstance().getServer();
+    
+    MjpegServer c2 = new MjpegServer("Camera2", 7072);
+    mj.setSource(backCamera);
 
   
   }
@@ -128,6 +150,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    
     Scheduler.getInstance().run();
   }
 
