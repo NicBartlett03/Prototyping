@@ -71,7 +71,7 @@ public class Robot extends TimedRobot {
     autoChooser.addOption("Pass HAB line (lvl. 2)", new AutoDriveForward(100));
     
     SmartDashboard.putData(autoChooser);
-    SmartDashboard.putData(actuatorPosition);
+    SmartDashboard.putNumber("Hatch POT Voltage", Robot.actuatorPosition.getVoltage());
 
     frontCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.frontCamera);
 		frontCamera.setResolution(40, 40);
