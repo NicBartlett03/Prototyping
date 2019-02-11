@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoDriveForward;
@@ -61,16 +62,17 @@ public class Robot extends TimedRobot {
 
     oi = new OI();
 
-    autoChooser = new SendableChooser<>();
-
     actuatorPosition = new AnalogInput(0);
 
+    Shuffleboard.getTab("Auto Options")
+      .add("Drive 6 feet", new AutoDriveForward(74));
 
-    autoChooser.setDefaultOption("Drive forward 6 feet", new AutoDriveForward(74));
-    autoChooser.addOption("Pass HAB line (lvl. 1)", new AutoDriveForward(48));
-    autoChooser.addOption("Pass HAB line (lvl. 2)", new AutoDriveForward(100));
+    Shuffleboard.getTab("Auto Options")
+      .add("Pass HAB line (lvl. 1)", new AutoDriveForward(48));
+
+    Shuffleboard.getTab("Auto Options")
+      .add("Pass HAB line (lvl. 2)", new AutoDriveForward(100));
     
-    SmartDashboard.putData(autoChooser);
     SmartDashboard.putNumber("Hatch POT Voltage", Robot.actuatorPosition.getVoltage());
 
     frontCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.frontCamera);
