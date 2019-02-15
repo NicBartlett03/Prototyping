@@ -10,10 +10,12 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
+import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.ExtendIntake;
 import frc.robot.commands.HatchIntakeDown;
 import frc.robot.commands.HatchIntakeUp;
 import frc.robot.commands.RetractIntake;
+import frc.robot.commands.SwapDriveDirection;
 
 
 /**
@@ -30,11 +32,11 @@ public class OI {
     
         //  8==========D
 
-        Button pilotButtonA = new JoystickButton(pilotController, RobotMap.joystickButtonA);
-        pilotButtonA.whenPressed(new HatchIntakeDown());
+        Button copilotButtonA = new JoystickButton(coPilotController, RobotMap.joystickButtonA);
+        copilotButtonA.whenPressed(new HatchIntakeDown());
         
-        Button pilotButtonY = new JoystickButton(pilotController, RobotMap.joystickButtonY);
-        pilotButtonY.whenPressed(new HatchIntakeUp());
+        Button copilotButtonY = new JoystickButton(coPilotController, RobotMap.joystickButtonY);
+        copilotButtonY.whenPressed(new HatchIntakeUp());
 
         Button pilotButtonX = new JoystickButton(pilotController, RobotMap.joystickButtonX);
         pilotButtonX.whenPressed(new ExtendIntake(2.6));
@@ -42,12 +44,15 @@ public class OI {
         Button pilotButtonB = new JoystickButton(pilotController, RobotMap.joystickButtonB);
         pilotButtonB.whenPressed(new RetractIntake(1));
 
+        Button pilotButtonY = new JoystickButton(pilotController, RobotMap.joystickButtonY);
+        pilotButtonY.whenPressed(new SwapDriveDirection());
         
         
-        pilotButtonA.close();
-        pilotButtonY.close();
+        copilotButtonA.close();
+        copilotButtonY.close();
         pilotButtonX.close();
         pilotButtonB.close();
+        pilotButtonY.close();
     }
 
     public Joystick getPilotController() {
