@@ -52,7 +52,7 @@ public class RetractIntake extends PIDCommand {
   
   @Override
   protected double returnPIDInput() {
-    currentActuatorVoltage = Robot.actuatorPosition.getVoltage();
+    currentActuatorVoltage = Robot.intakeExtender.getActuatorPosition();
     return currentActuatorVoltage;
   }
 

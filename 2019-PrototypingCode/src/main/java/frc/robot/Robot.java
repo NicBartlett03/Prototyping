@@ -7,9 +7,11 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -22,6 +24,8 @@ import frc.robot.subsystems.CargoIntake;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.HatchIntake;
 import frc.robot.subsystems.IntakeExtender;
+
+
 
 
 /**
@@ -46,14 +50,25 @@ public class Robot extends TimedRobot {
 
   public SendableChooser<Command> autoChooser;
 
+  
   public static AnalogInput actuatorPosition;
+  public static AnalogInput distanceSensor;
+  public static final int IMG_WIDTH = 320;
+  public static final int IMG_HEIGHT = 240;
+  public double centerX = 0; 
+  public boolean prevTrigger = false;
+
+  public final Object imgLock = new Object();
+
 
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
+
   @Override
-  public void robotInit() {
+  public void robotInit(){
+
 
     hatchIntake = new HatchIntake();
     drivetrain = new Drivetrain();
@@ -63,6 +78,13 @@ public class Robot extends TimedRobot {
     oi = new OI();
 
     actuatorPosition = new AnalogInput(0);
+    distanceSensor = new AnalogInput(1);
+    
+    autoChooser = new SendableChooser<>();
+
+    NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
+
+    SmartDashboard.putData(actuatorPosition);
 
     Shuffleboard.getTab("Auto Options")
       .add("Drive 6 feet", new AutoDriveForward(74));
@@ -73,15 +95,20 @@ public class Robot extends TimedRobot {
     Shuffleboard.getTab("Auto Options")
       .add("Pass HAB line (lvl. 2)", new AutoDriveForward(100));
     
-    SmartDashboard.putNumber("Hatch POT Voltage", Robot.actuatorPosition.getVoltage());
 
     frontCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.frontCamera);
-		frontCamera.setResolution(40, 40);
-		frontCamera.setExposureAuto();
-		backCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.backCamera);
-		backCamera.setResolution(40, 40);
+		frontCamera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+    frontCamera.setExposureAuto();
+
+    MjpegServer mj = new MjpegServer("Camera1", 7072);
+    mj.setSource(frontCamera);
+    
+    backCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.backCamera);
+		backCamera.setResolution(IMG_WIDTH, IMG_HEIGHT);
 		backCamera.setExposureAuto();
-		cameraServer = CameraServer.getInstance().getServer();
+    
+    MjpegServer c2 = new MjpegServer("Camera2", 7072);
+    mj.setSource(backCamera);
 
   
   }
@@ -136,6 +163,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    
     Scheduler.getInstance().run();
   }
 

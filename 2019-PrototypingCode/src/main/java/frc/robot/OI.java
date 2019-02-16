@@ -37,10 +37,10 @@ public class OI {
         pilotButtonY.whenPressed(new HatchIntakeUp());
 
         Button pilotButtonX = new JoystickButton(pilotController, RobotMap.joystickButtonX);
-        pilotButtonX.whenPressed(new ExtendIntake(2.6));
+        pilotButtonX.whenPressed(new ExtendIntake(3));
         
         Button pilotButtonB = new JoystickButton(pilotController, RobotMap.joystickButtonB);
-        pilotButtonB.whenPressed(new RetractIntake(1));
+        pilotButtonB.whenPressed(new RetractIntake(1.5));
 
         
         
