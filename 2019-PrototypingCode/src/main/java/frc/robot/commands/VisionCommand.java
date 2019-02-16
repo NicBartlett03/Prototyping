@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Robot;
+import frc.robot.RobotMap;
 
 public class VisionCommand extends Command {
   public VisionCommand() {
@@ -23,12 +24,20 @@ public class VisionCommand extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    ShuffleboardTab middleX = Shuffleboard.getTab("X");
+    super.initialize();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    super.execute();
+    double speed = -Robot.oi.getPilotController().getRawAxis(RobotMap.leftJoystickYAxis);
+    double rotation = 0.0;
+    if((Robot.distanceSensor.getVoltage()/5)*512 > Robot.MIN_DISTANCE ){
+
+    }
+
+    Robot.drivetrain.arcadeDrive(speed, rotation);
   }
 
   // Make this return true when this Command no longer needs to run execute()
