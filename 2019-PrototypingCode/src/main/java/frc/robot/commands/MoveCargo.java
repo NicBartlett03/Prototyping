@@ -12,6 +12,7 @@ import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class MoveCargo extends Command {
+  private double yAxis = 0.0;
   
   public MoveCargo() {
     requires(Robot.cargoIntake);
@@ -26,7 +27,12 @@ public class MoveCargo extends Command {
   @Override
   protected void execute() {
     Robot.cargoIntake.cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis));
-    Robot.cargoIntake.cargoExtensionMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis));
+    yAxis = Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis);
+  if(yAxis < 0){
+    Robot.cargoIntake.cargoExtensionMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) * -.4);
+  }else{
+    Robot.cargoIntake.cargoExtensionMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) * -.1);
+  }
   }
 
   // Make this return true when this Command no longer needs to run execute()

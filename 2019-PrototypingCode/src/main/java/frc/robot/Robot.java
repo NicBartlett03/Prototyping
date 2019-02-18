@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
   public static final int IMG_HEIGHT = 240;
   public double centerX = 0; 
   public boolean prevTrigger = false;
+  public static final int MIN_DISTANCE = 30;
 
   public final Object imgLock = new Object();
 

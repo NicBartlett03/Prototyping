@@ -19,7 +19,7 @@ public class RetractIntake extends PIDCommand {
     requires(Robot.intakeExtender);
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
-    getPIDController().setAbsoluteTolerance(0.1);
+    getPIDController().setAbsoluteTolerance(0.05);
     getPIDController().setSetpoint(position);
 
   }

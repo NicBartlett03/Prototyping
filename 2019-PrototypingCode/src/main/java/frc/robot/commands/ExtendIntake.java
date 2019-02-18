@@ -18,7 +18,7 @@ public class ExtendIntake extends PIDCommand {
    super(5, 0, -5);
    requires(Robot.intakeExtender);
     	
-    	getPIDController().setAbsoluteTolerance(.1);
+    	getPIDController().setAbsoluteTolerance(.05);
     	getPIDController().setSetpoint(position);
   }
 

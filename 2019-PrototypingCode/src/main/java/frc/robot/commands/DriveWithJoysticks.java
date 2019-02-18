@@ -27,15 +27,15 @@ public class DriveWithJoysticks extends Command {
   protected void execute() {
     super.execute();
 
-    double speed = -Robot.oi.getPilotController().getRawAxis(RobotMap.leftJoystickYAxis);
-    double rotation = Robot.oi.getPilotController().getRawAxis(RobotMap.rightJoystickXAxis);
+    double speed = -Robot.oi.getPilotController().getRawAxis(RobotMap.leftJoystickYAxis) * 0.8;
+    double rotation = Robot.oi.getPilotController().getRawAxis(RobotMap.rightJoystickXAxis) * 0.75;
     
     if(Robot.drivetrain.shouldUseReverseDrive() == false){
       Robot.drivetrain.arcadeDrive(speed, rotation);
     }
     
     else{
-      Robot.drivetrain.arcadeDrive(-speed, -rotation);
+      Robot.drivetrain.arcadeDrive(-speed, rotation);
     }
   }
   
