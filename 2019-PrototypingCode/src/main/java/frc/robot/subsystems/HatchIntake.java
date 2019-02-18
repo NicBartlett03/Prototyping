@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -26,7 +25,7 @@ public class HatchIntake extends Subsystem {
    
   }
   public int getLimitValue(){
-    return limitSwitch1.getValue();
+    return Robot.limitSwitch1.getValue();
   }
 
   public void intakeUp() {

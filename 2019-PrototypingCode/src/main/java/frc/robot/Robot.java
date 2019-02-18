@@ -53,7 +53,7 @@ public class Robot extends TimedRobot {
   
   public static AnalogInput actuatorPosition;
   public static AnalogInput distanceSensor;
-  public static AnalogInput limitSwitch;
+  public static AnalogInput limitSwitch1;
   public static final int IMG_WIDTH = 320;
   public static final int IMG_HEIGHT = 240;
   public double centerX = 0; 
@@ -81,6 +81,7 @@ public class Robot extends TimedRobot {
 
     actuatorPosition = new AnalogInput(0);
     distanceSensor = new AnalogInput(1);
+    limitSwitch1 = new AnalogInput(2);
     
     autoChooser = new SendableChooser<>();
 
@@ -90,7 +91,7 @@ public class Robot extends TimedRobot {
     
     SmartDashboard.putData(distanceSensor);
 
-    SmartDashboard.putData(hatchIntake.limitSwitch);
+    SmartDashboard.putData(limitSwitch1);
 
     Shuffleboard.getTab("Auto Options")
       .add("Drive 6 feet", new AutoDriveForward(74));
