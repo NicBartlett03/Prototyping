@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -24,6 +25,9 @@ public class HatchIntake extends Subsystem {
   public void initDefaultCommand() {
    
   }
+  public int getLimitValue(){
+    return limitSwitch1.getValue();
+  }
 
   public void intakeUp() {
     Robot.hatchIntake.hatchIntakeMotor.set(-.8);
@@ -35,6 +39,14 @@ public class HatchIntake extends Subsystem {
 
   public void hatchIntakeStop() {
   Robot.hatchIntake.hatchIntakeMotor.set(0);
-}
+  }
+
+  public void limitActive(){
+    if(getLimitValue() >= 1){
+      Robot.hatchIntake.hatchIntakeMotor.set(0);
+    }else if(getLimitValue() <= 1){
+     Robot.hatchIntake.intakeUp();
+    }
+  }
 
 }
