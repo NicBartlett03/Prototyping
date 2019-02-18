@@ -19,6 +19,8 @@ public class HatchIntakeDown extends TimedCommand {
 
   public HatchIntakeDown() {
     super(time);
+    requires(Robot.hatchIntake);
+
     
   }
 
