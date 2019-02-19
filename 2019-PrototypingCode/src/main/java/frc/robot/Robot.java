@@ -54,7 +54,11 @@ public class Robot extends TimedRobot {
   
   public static AnalogInput actuatorPosition;
   public static AnalogInput distanceSensor;
+<<<<<<< HEAD
   public static DigitalInput limitSwitch1;
+=======
+  public static AnalogInput limitSwitch1;
+>>>>>>> 9cf838a5e2e129dca826953ba0814767e1d259f0
   public static final int IMG_WIDTH = 320;
   public static final int IMG_HEIGHT = 240;
   public double centerX = 0; 
@@ -82,8 +86,12 @@ public class Robot extends TimedRobot {
 
     actuatorPosition = new AnalogInput(0);
     distanceSensor = new AnalogInput(1);
+<<<<<<< HEAD
     limitSwitch1 = new DigitalInput(0);
   
+=======
+    limitSwitch1 = new AnalogInput(2);
+>>>>>>> 9cf838a5e2e129dca826953ba0814767e1d259f0
     
     autoChooser = new SendableChooser<>();
 
