@@ -28,6 +28,7 @@ public class CargoIntake extends Subsystem {
 
   public CargoIntake(){
     configureControllers();
+    cargoExtensionMotor.setSmartCurrentLimit(Robot.MAX_CURRENT_NEO);
   }
 
   @Override
@@ -60,17 +61,17 @@ public class CargoIntake extends Subsystem {
 
   }
 
-  public boolean getLowerLimit(){
-    return !Robot.lowerLimitSwitch.get();
+  public boolean getCargoLowerLimit(){
+    return !Robot.lowerCargoLimitSwitch.get();
   }
 
-  public boolean getUpperLimit(){
-    return Robot.upperLimitSwitch.get();
+  public boolean getCargoUpperLimit(){
+    return Robot.upperCargoLimitSwitch.get();
   }
 
   public void checkCargoLimits(){
     armDirection = Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) < 0;
-    if(armDirection && getUpperLimit() || !armDirection && getLowerLimit()){
+    if(armDirection && getCargoUpperLimit() || !armDirection && getCargoLowerLimit()){
       cargoExtensionStop();
       return;
     }

@@ -33,7 +33,7 @@ public class HatchIntakeUp extends Command {
   @Override
   protected boolean isFinished() {
     
-    return Robot.hatchIntake.getLimitBoolean();
+    return Robot.hatchIntake.getUpperHatchLimit();
   }
 
   // Called once after isFinished returns true
