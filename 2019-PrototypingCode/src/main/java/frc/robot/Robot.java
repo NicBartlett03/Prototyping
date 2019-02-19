@@ -84,7 +84,6 @@ public class Robot extends TimedRobot {
 
     actuatorPosition = new AnalogInput(0);
     distanceSensor = new AnalogInput(1);
-    
     limitSwitch1 = new DigitalInput(0);
     lowerLimitSwitch = new DigitalInput(1);
     upperLimitSwitch = new DigitalInput(2);
@@ -99,8 +98,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(distanceSensor);
 
     SmartDashboard.putData(limitSwitch1);
-    SmartDashboard.putData(lowerLimitSwitch);
     SmartDashboard.putData(upperLimitSwitch);
+    SmartDashboard.putData(lowerLimitSwitch);
 
     Shuffleboard.getTab("Auto Options")
       .add("Drive 6 feet", new AutoDriveForward(74));
