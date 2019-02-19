@@ -7,10 +7,7 @@
 
 package frc.robot.subsystems;
 
-<<<<<<< HEAD
 //import edu.wpi.first.wpilibj.DigitalInput;
-=======
->>>>>>> 9cf838a5e2e129dca826953ba0814767e1d259f0
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -28,13 +25,8 @@ public class HatchIntake extends Subsystem {
   public void initDefaultCommand() {
    
   }
-<<<<<<< HEAD
   public boolean getLimitBoolean(){
-    return Robot.limitSwitch1.get();
-=======
-  public int getLimitValue(){
-    return Robot.limitSwitch1.getValue();
->>>>>>> 9cf838a5e2e129dca826953ba0814767e1d259f0
+    return !Robot.limitSwitch1.get();
   }
 
   public void intakeUp() {

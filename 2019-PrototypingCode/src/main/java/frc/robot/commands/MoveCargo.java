@@ -9,10 +9,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 
 public class MoveCargo extends Command {
-  private double yAxis = 0.0;
   
   public MoveCargo() {
     requires(Robot.cargoIntake);
@@ -26,13 +24,8 @@ public class MoveCargo extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.cargoIntake.cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis));
-    yAxis = Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis);
-  if(yAxis < 0){
-    Robot.cargoIntake.cargoExtensionMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) * -.4);
-  }else{
-    Robot.cargoIntake.cargoExtensionMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) * -.1);
-  }
+    Robot.cargoIntake.intakeCargo();
+    Robot.cargoIntake.checkCargoLimits();
   }
 
   // Make this return true when this Command no longer needs to run execute()
