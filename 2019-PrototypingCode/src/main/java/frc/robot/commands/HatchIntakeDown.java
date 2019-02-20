@@ -36,7 +36,7 @@ public class HatchIntakeDown extends Command {
   // Called once after timeout
   @Override
   protected boolean isFinished() {
-    return Robot.hatchIntake.getLowerHatchLimit();
+    return false;  //Robot.hatchIntake.getLowerHatchLimit();
   }
 
   @Override

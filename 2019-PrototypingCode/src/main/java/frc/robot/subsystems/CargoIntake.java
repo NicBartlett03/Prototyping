@@ -51,9 +51,9 @@ public class CargoIntake extends Subsystem {
   }
 
   public void intakeCargo(){
-    intakeDirection = Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis) < 0;
+    intakeDirection = Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis) > 0;
     if(intakeDirection){
-      cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis) * 0.7);
+      cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis) * 0.5);
     }
     else{
       cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis));
