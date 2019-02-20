@@ -54,15 +54,16 @@ public class Robot extends TimedRobot {
   
   public static AnalogInput actuatorPosition;
   public static AnalogInput distanceSensor;
-  public static DigitalInput limitSwitch1;
-  public static DigitalInput lowerLimitSwitch;
-  public static DigitalInput upperLimitSwitch;
-  
+  public static DigitalInput lowerHatchLimitSwitch;
+  public static DigitalInput upperHatchLimitSwitch;
+  public static DigitalInput lowerCargoLimitSwitch;
+  public static DigitalInput upperCargoLimitSwitch;
   public static final int IMG_WIDTH = 320;
   public static final int IMG_HEIGHT = 240;
   public double centerX = 0; 
   public boolean prevTrigger = false;
   public static final int   MIN_DISTANCE = 30;
+  public static final int MAX_CURRENT_NEO = 40;
 
   public final Object imgLock = new Object();
 
@@ -85,10 +86,10 @@ public class Robot extends TimedRobot {
 
     actuatorPosition = new AnalogInput(0);
     distanceSensor = new AnalogInput(1);
-    
-    limitSwitch1 = new DigitalInput(0);
-    lowerLimitSwitch = new DigitalInput(1);
-    upperLimitSwitch = new DigitalInput(2);
+    upperHatchLimitSwitch = new DigitalInput(0);
+    lowerHatchLimitSwitch = new DigitalInput(4);
+    lowerCargoLimitSwitch = new DigitalInput(1);
+    upperCargoLimitSwitch = new DigitalInput(2);
   
     
     autoChooser = new SendableChooser<>();
@@ -99,9 +100,9 @@ public class Robot extends TimedRobot {
     
     SmartDashboard.putData(distanceSensor);
 
-    SmartDashboard.putData(limitSwitch1);
-    SmartDashboard.putData(lowerLimitSwitch);
-    SmartDashboard.putData(upperLimitSwitch);
+    SmartDashboard.putData(upperHatchLimitSwitch);
+    SmartDashboard.putData(upperCargoLimitSwitch);
+    SmartDashboard.putData(lowerCargoLimitSwitch);
 
     Shuffleboard.getTab("Auto Options")
       .add("Drive 6 feet", new AutoDriveForward(74));
