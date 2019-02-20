@@ -49,7 +49,7 @@ public class CargoIntake extends Subsystem {
   public void intakeCargo(){
     intakeDirection = Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis) < 0;
     if(intakeDirection){
-      Robot.cargoIntake.cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis) * 0.7);
+      Robot.cargoIntake.cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis)/* * 0.7*/);
     }
     else{
       Robot.cargoIntake.cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis));
@@ -58,26 +58,26 @@ public class CargoIntake extends Subsystem {
   }
 
   public boolean getLowerLimit(){
-    return !Robot.lowerLimitSwitch.get();
+    return Robot.lowerLimitSwitch.get();
   }
 
   public boolean getUpperLimit(){
-    return Robot.upperLimitSwitch.get();
+    return !Robot.upperLimitSwitch.get();
   }
-
-  public void checkCargoLimits(){
-    armDirection = Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) < 0;
-    if(armDirection && getUpperLimit() || !armDirection && getLowerLimit()){
-      return;
-    }
-    moveCargoArm();
-  }
+    
 
   public void moveCargoArm(){
-  if(armDirection && !getUpperLimit()){
+    armDirection = Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) < 0;
+  if(armDirection && getUpperLimit()){
     Robot.cargoIntake.cargoExtensionMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) * -.4);
-  }else{
+  }else if(!armDirection && getLowerLimit()){
     Robot.cargoIntake.cargoExtensionMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) * -.1);
+  }
+  else if(armDirection && !getUpperLimit()){
+    cargoIntakeStop();
+  }
+  else if(!armDirection && !getLowerLimit()){
+    cargoIntakeStop();
   }
   }
 }

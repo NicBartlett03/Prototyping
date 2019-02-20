@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
   public static DigitalInput limitSwitch1;
   public static DigitalInput lowerLimitSwitch;
   public static DigitalInput upperLimitSwitch;
+  
   public static final int IMG_WIDTH = 320;
   public static final int IMG_HEIGHT = 240;
   public double centerX = 0; 

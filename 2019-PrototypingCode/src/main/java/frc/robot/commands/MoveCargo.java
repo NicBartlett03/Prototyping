@@ -25,7 +25,7 @@ public class MoveCargo extends Command {
   @Override
   protected void execute() {
     Robot.cargoIntake.intakeCargo();
-    Robot.cargoIntake.checkCargoLimits();
+    Robot.cargoIntake.moveCargoArm();
   }
 
   // Make this return true when this Command no longer needs to run execute()
