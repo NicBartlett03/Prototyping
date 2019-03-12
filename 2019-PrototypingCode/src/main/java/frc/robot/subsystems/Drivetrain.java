@@ -32,7 +32,7 @@ public class Drivetrain extends Subsystem {
   
   private DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
 
-  private boolean useReverseDrive = false;
+  public boolean useReverseDrive = false;
   
   public Drivetrain(){
     drive = new DifferentialDrive(leftMotors, rightMotors);

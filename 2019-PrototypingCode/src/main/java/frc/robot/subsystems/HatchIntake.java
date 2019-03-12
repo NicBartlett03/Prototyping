@@ -26,7 +26,7 @@ public class HatchIntake extends Subsystem {
    
   }
   public boolean getUpperHatchLimit(){
-    return !Robot.upperHatchLimitSwitch.get();
+    return Robot.upperHatchLimitSwitch.get();
   }
 
   public boolean getLowerHatchLimit(){

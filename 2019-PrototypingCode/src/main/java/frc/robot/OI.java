@@ -40,7 +40,7 @@ public class OI {
         pilotButtonX.whenPressed(new ExtendIntake(1.6));
         
         Button pilotButtonB = new JoystickButton(pilotController, RobotMap.joystickButtonB);
-        pilotButtonB.whenPressed(new RetractIntake(0.92));
+        pilotButtonB.whenPressed(new RetractIntake(0.94));
 
         Button pilotButtonY = new JoystickButton(pilotController, RobotMap.joystickButtonY);
         pilotButtonY.whenPressed(new SwapDriveDirection());

@@ -11,22 +11,15 @@ import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.buttons.Trigger;
-import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.AutoDriveForward;
 import frc.robot.commands.DriveWithJoysticks;
 import frc.robot.commands.ExtendIntake;
-import frc.robot.commands.HatchIntakeDown;
 import frc.robot.commands.HatchIntakeUp;
-import frc.robot.commands.RetractIntake;
 import frc.robot.commands.SwapDriveDirection;
 import frc.robot.subsystems.CargoIntake;
 import frc.robot.subsystems.Drivetrain;
@@ -71,8 +64,8 @@ public class Robot extends TimedRobot {
   public static DigitalInput upperHatchLimitSwitch;
   public static DigitalInput lowerCargoLimitSwitch;
   public static DigitalInput upperCargoLimitSwitch;
-  public static final int IMG_WIDTH = 320;
-  public static final int IMG_HEIGHT = 240;
+  public static final int IMG_WIDTH = 1;
+  public static final int IMG_HEIGHT = 1;
   public double centerX = 0; 
   public boolean prevTrigger = false;
   public static final int   MIN_DISTANCE = 30;
@@ -115,10 +108,7 @@ public class Robot extends TimedRobot {
     lowerHatchLimitSwitch = new DigitalInput(4);
     lowerCargoLimitSwitch = new DigitalInput(1);
     upperCargoLimitSwitch = new DigitalInput(2);
-  
-    
 
-    NetworkTableInstance ntinst = NetworkTableInstance.getDefault();
 
     SmartDashboard.putData(actuatorPosition);
     
@@ -128,7 +118,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(upperCargoLimitSwitch);
     SmartDashboard.putData(lowerCargoLimitSwitch);
     
-
     frontCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.frontCamera);
 		frontCamera.setResolution(IMG_WIDTH, IMG_HEIGHT);
     frontCamera.setExposureAuto();
@@ -143,6 +132,9 @@ public class Robot extends TimedRobot {
     
     MjpegServer c2 = new MjpegServer("Camera2", 7072);
     mj.setSource(backCamera);
+
+    mj.close();
+    c2.close();
 
   
   }
@@ -201,6 +193,9 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     
     Scheduler.getInstance().run();
+    SmartDashboard.putBoolean("leftBumper", Robot.oi.getPilotController().getRawButton(RobotMap.joystickLeftBumper));
+    SmartDashboard.putBoolean("ReverseDriveActive", Robot.drivetrain.shouldUseReverseDrive());
+
   }
 
   /**
