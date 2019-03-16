@@ -9,44 +9,29 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 
-public class DriveWithJoysticks extends Command {
-  public DriveWithJoysticks() {
-    requires(Robot.drivetrain);
+public class SwapIntake extends Command {
+  public SwapIntake() {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    super.initialize();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    super.execute();
-
-    double speed = -Robot.oi.getPilotController().getRawAxis(RobotMap.leftJoystickYAxis);
-    double rotation = Robot.oi.getPilotController().getRawAxis(RobotMap.rightJoystickXAxis) * 0.8;
-    
-    if(Robot.drivetrain.shouldUseReverseDrive()){
-      speed *= -1;
-    }
-
-    if(Robot.oi.getPilotController().getRawButton(RobotMap.joystickRightBumper) || Robot.oi.getPilotController().getRawButton(RobotMap.joystickLeftBumper)){
-      Robot.drivetrain.arcadeDrive(speed * 0.5, rotation * 0.65);
-    }
-    else{
-      Robot.drivetrain.arcadeDrive(speed, rotation);
-    }
+    boolean currentRunIntake = Robot.cargoIntake.shouldRunIntake();
+    Robot.cargoIntake.setRunIntake(! currentRunIntake);
   }
-  
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true

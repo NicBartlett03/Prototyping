@@ -15,6 +15,7 @@ import frc.robot.commands.HatchIntakeDown;
 import frc.robot.commands.HatchIntakeUp;
 import frc.robot.commands.RetractIntake;
 import frc.robot.commands.SwapDriveDirection;
+import frc.robot.commands.SwapIntake;
 import frc.robot.commands.VisionCommand;
 
 
@@ -30,29 +31,39 @@ public class OI {
         pilotController = new Joystick(0);
         coPilotController = new Joystick(1);
 
+        /*
         Button copilotButtonA = new JoystickButton(coPilotController, RobotMap.joystickButtonA);
         copilotButtonA.whileHeld(new HatchIntakeDown());
         
         Button copilotButtonY = new JoystickButton(coPilotController, RobotMap.joystickButtonY);
         copilotButtonY.whileHeld(new HatchIntakeUp());
+        */
 
-        Button pilotButtonX = new JoystickButton(pilotController, RobotMap.joystickButtonX);
-        pilotButtonX.whenPressed(new ExtendIntake(1.6));
+        Button copilotButtonX = new JoystickButton(coPilotController, RobotMap.joystickButtonX);
+        copilotButtonX.whenPressed(new SwapIntake());
+
+        Button copilotButtonY = new JoystickButton(coPilotController, RobotMap.joystickButtonY);
+        copilotButtonY.whenPressed(new ExtendIntake(1.75));
+
+        Button copilotButtonB = new JoystickButton(coPilotController, RobotMap.joystickButtonB);
+        copilotButtonB.whenPressed(new ExtendIntake(1.6));
         
-        Button pilotButtonB = new JoystickButton(pilotController, RobotMap.joystickButtonB);
-        pilotButtonB.whenPressed(new RetractIntake(0.94));
+        Button copilotButtonA = new JoystickButton(coPilotController, RobotMap.joystickButtonA);
+        copilotButtonA.whenPressed(new RetractIntake(0.94));
 
         Button pilotButtonY = new JoystickButton(pilotController, RobotMap.joystickButtonY);
         pilotButtonY.whenPressed(new SwapDriveDirection());
 
         Button pilotButtonA = new JoystickButton(pilotController, RobotMap.joystickButtonA);
         pilotButtonA.toggleWhenPressed(new VisionCommand());
+
+        
         
         
         copilotButtonA.close();
         copilotButtonY.close();
-        pilotButtonX.close();
-        pilotButtonB.close();
+        copilotButtonX.close();
+        copilotButtonB.close();
         pilotButtonY.close();
         pilotButtonA.close();
 

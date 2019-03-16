@@ -25,10 +25,14 @@ public class CargoIntake extends Subsystem {
   public CANSparkMax cargoExtensionMotor = new CANSparkMax(RobotMap.cargoExtensionMotor, MotorType.kBrushless);
   private boolean armDirection;
   private boolean intakeDirection;
+  public boolean runIntake = false;
 
   public CargoIntake(){
     configureControllers();
     cargoExtensionMotor.setSmartCurrentLimit(Robot.MAX_CURRENT_NEO);
+    cargoIntakeMotor.configPeakCurrentLimit(0);
+    cargoIntakeMotor.configContinuousCurrentLimit(5);
+    cargoIntakeMotor.enableCurrentLimit(true);
   }
 
   @Override
@@ -51,14 +55,17 @@ public class CargoIntake extends Subsystem {
   }
 
   public void intakeCargo(){
-    intakeDirection = Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis) > 0;
-    if(intakeDirection){
-      cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis) * 0.7);
-    }
-    else{
-      cargoIntakeMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.rightJoystickYAxis));
-    }
-
+   if(! shouldRunIntake()){
+    cargoIntakeStop();
+   }
+   else if(Robot.oi.getcoPilotController().getRawButton(RobotMap.joystickRightBumper)){
+    cargoIntakeMotor.configContinuousCurrentLimit(25); 
+    cargoIntakeMotor.set(-1);
+   }
+   else{
+    cargoIntakeMotor.configContinuousCurrentLimit(5);  
+    cargoIntakeMotor.set(1);
+   }
   }
 
   public boolean getCargoLowerLimit(){
@@ -85,5 +92,13 @@ public class CargoIntake extends Subsystem {
     }else{
       cargoExtensionMotor.set(Robot.oi.getcoPilotController().getRawAxis(RobotMap.leftJoystickYAxis) * -.2);
     }
+  }
+
+  public boolean shouldRunIntake(){
+    return runIntake;
+  }
+
+  public void setRunIntake(boolean notCurrentRunIntake){
+    runIntake = notCurrentRunIntake;
   }
 }

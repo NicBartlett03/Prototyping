@@ -193,9 +193,11 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     
     Scheduler.getInstance().run();
+    SmartDashboard.putBoolean("rightBumper", Robot.oi.getPilotController().getRawButton(RobotMap.joystickRightBumper));
     SmartDashboard.putBoolean("leftBumper", Robot.oi.getPilotController().getRawButton(RobotMap.joystickLeftBumper));
+    SmartDashboard.putBoolean("runIntake", Robot.cargoIntake.shouldRunIntake());
     SmartDashboard.putBoolean("ReverseDriveActive", Robot.drivetrain.shouldUseReverseDrive());
-
+    SmartDashboard.putNumber("CurrentLimiting", Robot.cargoIntake.cargoIntakeMotor.getOutputCurrent());
   }
 
   /**
