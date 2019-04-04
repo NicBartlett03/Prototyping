@@ -34,7 +34,7 @@ public class RobotMap {
 	public static final int joystickLeftBumper 			= 5;
 	public static final int joystickRightBumper 		= 6;
 	public static final int joystickButtonBack 			= 7;
-	public static final int joystickButtonsStart 		= 8;
+	public static final int joystickButtonStart 		= 8;
 	public static final int joystickButtonLeftStick 	= 9;
 	public static final int joystickButtonRightStick 	= 10;
 

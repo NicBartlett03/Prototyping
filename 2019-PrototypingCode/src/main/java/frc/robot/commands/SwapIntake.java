@@ -7,62 +7,41 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class ExtendIntake extends PIDCommand {
-
-  private double currentActuatorVoltage;
-  
-  public ExtendIntake(double position) {
-   super(5, 0, -5);
-   requires(Robot.intakeExtender);
-    	
-    	getPIDController().setAbsoluteTolerance(.05);
-    	getPIDController().setSetpoint(position);
+public class SwapIntake extends Command {
+  public SwapIntake() {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    super.initialize();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    getPIDController().enable();
+    boolean currentRunIntake = Robot.cargoIntake.shouldRunIntake();
+    Robot.cargoIntake.setRunIntake(! currentRunIntake);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return getPIDController().onTarget();
+    return true;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.intakeExtender.stopExtension();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
-    getPIDController().disable();
-    super.end();
-  }
-
-  @Override
-  protected double returnPIDInput() {
-    currentActuatorVoltage = Robot.intakeExtender.getActuatorPosition();
-    return currentActuatorVoltage;
-  }
-
-  @Override
-  protected void usePIDOutput(double output) {
-    Robot.intakeExtender.hatchIntakeExtensionMotor.set(output);
   }
 }

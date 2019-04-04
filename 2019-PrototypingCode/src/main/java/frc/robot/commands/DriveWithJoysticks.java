@@ -28,10 +28,20 @@ public class DriveWithJoysticks extends Command {
     super.execute();
 
     double speed = -Robot.oi.getPilotController().getRawAxis(RobotMap.leftJoystickYAxis);
-    double rotation = Robot.oi.getPilotController().getRawAxis(RobotMap.rightJoystickXAxis);
+    double rotation = Robot.oi.getPilotController().getRawAxis(RobotMap.rightJoystickXAxis) * 0.8;
     
-    Robot.drivetrain.arcadeDrive(speed, rotation);
+    if(Robot.drivetrain.shouldUseReverseDrive()){
+      speed *= -1;
+    }
+
+    if(Robot.oi.getPilotController().getRawButton(RobotMap.joystickRightBumper) || Robot.oi.getPilotController().getRawButton(RobotMap.joystickLeftBumper)){
+      Robot.drivetrain.arcadeDrive(speed * 0.5, rotation * 0.65);
+    }
+    else{
+      Robot.drivetrain.arcadeDrive(speed, rotation);
+    }
   }
+  
 
   // Make this return true when this Command no longer needs to run execute()
   @Override

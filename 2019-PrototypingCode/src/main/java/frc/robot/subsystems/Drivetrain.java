@@ -31,6 +31,8 @@ public class Drivetrain extends Subsystem {
   private SpeedControllerGroup rightMotors = new SpeedControllerGroup(rightBackMotor, rightFrontMotor);
   
   private DifferentialDrive drive = new DifferentialDrive(leftMotors, rightMotors);
+
+  public boolean useReverseDrive = false;
   
   public Drivetrain(){
     drive = new DifferentialDrive(leftMotors, rightMotors);
@@ -43,10 +45,10 @@ public class Drivetrain extends Subsystem {
   }
 
   private void configureTalons() {
-		leftFrontMotor.configClosedloopRamp(1800, 0);
-		leftBackMotor.configClosedloopRamp(1800, 0);
-		rightFrontMotor.configClosedloopRamp(1800, 0);
-    rightBackMotor.configClosedloopRamp(1800, 0);
+		leftFrontMotor.configClosedloopRamp(.1, 0);
+		leftBackMotor.configClosedloopRamp(.1, 0);
+		rightFrontMotor.configClosedloopRamp(.1, 0);
+    rightBackMotor.configClosedloopRamp(.1, 0);
   }
 
   public void stopDrive(){
@@ -73,6 +75,15 @@ public class Drivetrain extends Subsystem {
     
   public void tankDrive(double leftSpeed, double rightSpeed){
       drive.tankDrive(leftSpeed, rightSpeed);
-    }
-
   }
+
+  public boolean shouldUseReverseDrive(){
+    return useReverseDrive;
+  }
+
+  public void setUseReverseDrive(boolean notCurrentDriveDirection){
+    useReverseDrive = notCurrentDriveDirection;
+  
+  }
+
+}

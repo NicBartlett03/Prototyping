@@ -7,19 +7,33 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.MjpegServer;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.buttons.Trigger;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DriverStation;
+import frc.robot.commands.DriveWithJoysticks;
+import frc.robot.commands.ExtendIntake;
+import frc.robot.commands.HatchIntakeUp;
+import frc.robot.commands.SwapDriveDirection;
+import frc.robot.commands.HatchInitial;
+import frc.robot.commands.SwapIntake;
 import frc.robot.commands.AutoDriveForward;
 import frc.robot.subsystems.CargoIntake;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.HatchIntake;
 import frc.robot.subsystems.IntakeExtender;
+
+
+
 
 
 /**
@@ -36,44 +50,114 @@ public class Robot extends TimedRobot {
   public static IntakeExtender intakeExtender;
   public static CargoIntake cargoIntake;
 
+  public static DriveWithJoysticks drive;
+  public static SwapDriveDirection swapDrive;
+  public static HatchIntakeUp upCommand;
+  public static HatchInitial hatch;
+  public static SwapIntake swapIntake;
+  public static AutoDriveForward driveForward;
+  
+  public static ExtendIntake extend;
+  public static ExtendIntake retract;
+
+  public static Trigger.ButtonScheduler upButton;
+
   public static OI oi;
+
+  public static DriverStation ds;
+
+  Command initialcCommand;
+  SendableChooser<Command> chooser; 
 
   public static UsbCamera frontCamera;
 	public static UsbCamera backCamera;
 	public static VideoSink cameraServer;
 
-  public SendableChooser<Command> autoChooser;
+  
+  public static AnalogInput actuatorPosition;
+  public static AnalogInput distanceSensor;
+  public static DigitalInput lowerHatchLimitSwitch;
+  public static DigitalInput upperHatchLimitSwitch;
+  public static DigitalInput lowerCargoLimitSwitch;
+  public static DigitalInput upperCargoLimitSwitch;
+  public static final int IMG_WIDTH = 1;
+  public static final int IMG_HEIGHT = 1;
+  public double centerX = 0; 
+  public boolean prevTrigger = false;
+  public static final int   MIN_DISTANCE = 30;
+  public static final int MAX_CURRENT_NEO = 40;
+
+  public final Object imgLock = new Object();
 
 
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
    */
+
   @Override
-  public void robotInit() {
+  public void robotInit(){
+
 
     hatchIntake = new HatchIntake();
     drivetrain = new Drivetrain();
     intakeExtender = new IntakeExtender();
     cargoIntake = new CargoIntake();
 
+    drive = new DriveWithJoysticks();
+    swapDrive = new SwapDriveDirection();
+    extend = new ExtendIntake(1.75);
+    hatch = new HatchInitial();
+    swapIntake = new SwapIntake();
+
+    chooser = new SendableChooser<>();
+    chooser.setDefaultOption("Hatch", hatch);
+    chooser.addOption("Cargo", swapIntake);
+    SmartDashboard.putData("Initial Chooser", chooser);
+
+    upButton = new Trigger.ButtonScheduler(){
+    
+      @Override
+      public void execute() {
+        upCommand.start();
+      }
+    };
+
     oi = new OI();
 
-    autoChooser = new SendableChooser<>();
+    actuatorPosition = new AnalogInput(0);
+    distanceSensor = new AnalogInput(1);
+    upperHatchLimitSwitch = new DigitalInput(0);
+    lowerHatchLimitSwitch = new DigitalInput(4);
+    lowerCargoLimitSwitch = new DigitalInput(1);
+    upperCargoLimitSwitch = new DigitalInput(2);
 
-    autoChooser.setDefaultOption("Drive forward 6 feet", new AutoDriveForward(74));
-    autoChooser.addOption("Pass HAB line (lvl. 1)", new AutoDriveForward(48));
-    autoChooser.addOption("Pass HAB line (lvl. 2)", new AutoDriveForward(100));
+
+    SmartDashboard.putData(actuatorPosition);
     
-    SmartDashboard.putData(autoChooser);
+    SmartDashboard.putData(distanceSensor);
 
+    SmartDashboard.putData(upperHatchLimitSwitch);
+    SmartDashboard.putData(upperCargoLimitSwitch);
+    SmartDashboard.putData(lowerCargoLimitSwitch);
+    
     frontCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.frontCamera);
-		frontCamera.setResolution(40, 40);
-		frontCamera.setExposureAuto();
-		backCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.backCamera);
-		backCamera.setResolution(40, 40);
+		frontCamera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+    frontCamera.setExposureAuto();
+    
+
+    MjpegServer mj = new MjpegServer("Camera1", 7072);
+    mj.setSource(frontCamera);
+    
+    backCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.backCamera);
+		backCamera.setResolution(IMG_WIDTH, IMG_HEIGHT);
 		backCamera.setExposureAuto();
-		cameraServer = CameraServer.getInstance().getServer();
+    
+    MjpegServer c2 = new MjpegServer("Camera2", 7072);
+    mj.setSource(backCamera);
+
+    mj.close();
+    c2.close();
 
   
   }
@@ -110,8 +194,12 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
   
     drivetrain.resetEncoders();
-    autoChooser.getSelected().start();
-  
+     
+    initialcCommand = (Command) chooser.getSelected();
+    initialcCommand.start();
+    drive.start();
+    //swapDrive.start();
+    //extend.start();
   }
 
   /**
@@ -120,7 +208,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
-    }
+  }
   
 
   /**
@@ -128,7 +216,14 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    
     Scheduler.getInstance().run();
+    SmartDashboard.putBoolean("rightBumper", Robot.oi.getPilotController().getRawButton(RobotMap.joystickRightBumper));
+    SmartDashboard.putBoolean("leftBumper", Robot.oi.getPilotController().getRawButton(RobotMap.joystickLeftBumper));
+    SmartDashboard.putBoolean("runIntake", Robot.cargoIntake.shouldRunIntake());
+    SmartDashboard.putBoolean("ReverseDriveActive", Robot.drivetrain.shouldUseReverseDrive());
+    SmartDashboard.putNumber("CurrentLimiting", Robot.cargoIntake.cargoIntakeMotor.getOutputCurrent());
+    SmartDashboard.putNumber("cargoEncoder", Robot.cargoIntake.getCargoArmEncoderPosition());
   }
 
   /**
@@ -136,5 +231,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  @Override
+  public void disabledInit() {
+    retract = new ExtendIntake(0.94);
+    if(actuatorPosition.getVoltage() > 0.95){
+      retract.start();
+    }
+    driveForward = new AutoDriveForward(1);
+    driveForward.start();
   }
 }

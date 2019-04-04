@@ -7,43 +7,49 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.PIDCommand;
+import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.commands.SwapIntake;
 
-public class ExtendIntake extends PIDCommand {
-
-  private double currentActuatorVoltage;
+public class AutoMoveCargoToPosition extends Command {
   
-  public ExtendIntake(double position) {
-   super(5, 0, -5);
-   requires(Robot.intakeExtender);
-    	
-    	getPIDController().setAbsoluteTolerance(.05);
-    	getPIDController().setSetpoint(position);
+  double position;
+  SwapIntake swapIntake = new SwapIntake();
+
+  public AutoMoveCargoToPosition(double position) {
+    requires(Robot.cargoIntake);
+    this.position = position;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
     super.initialize();
+    Robot.cargoIntake.setSetpoint(position);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    getPIDController().enable();
+    Robot.cargoIntake.cargoIntakeMotor.configContinuousCurrentLimit(8);
+    Robot.cargoIntake.cargoIntakeMotor.set(1);
+    Robot.cargoIntake.enable();
+    if(!Robot.cargoIntake.shouldRunIntake() && position == Robot.cargoIntake.getOffset()){
+      swapIntake.start();
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return getPIDController().onTarget();
+    return Robot.cargoIntake.onTarget();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.intakeExtender.stopExtension();
+    Robot.cargoIntake.disable();
+    Robot.cargoIntake.free();
   }
 
   // Called when another command which requires one or more of the same
@@ -51,18 +57,7 @@ public class ExtendIntake extends PIDCommand {
   @Override
   protected void interrupted() {
     end();
-    getPIDController().disable();
-    super.end();
   }
 
-  @Override
-  protected double returnPIDInput() {
-    currentActuatorVoltage = Robot.intakeExtender.getActuatorPosition();
-    return currentActuatorVoltage;
-  }
-
-  @Override
-  protected void usePIDOutput(double output) {
-    Robot.intakeExtender.hatchIntakeExtensionMotor.set(output);
-  }
+ 
 }
