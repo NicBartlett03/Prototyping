@@ -7,19 +7,17 @@
 
 package frc.robot.commands;
 
+
 import edu.wpi.first.wpilibj.command.PIDCommand;
 import frc.robot.Robot;
 
-public class ExtendIntake extends PIDCommand {
+public class TurnRobot extends PIDCommand {
+  public TurnRobot(double angle) {
+    super(10, 0, -5);
+    requires(Robot.drivetrain);
 
-  private double currentActuatorVoltage;
-  
-  public ExtendIntake(double position) {
-   super(5, 0, -5);
-   requires(Robot.intakeExtender);
-    	
-    	getPIDController().setAbsoluteTolerance(.05);
-    	getPIDController().setSetpoint(position);
+    getPIDController().setAbsoluteTolerance(3);
+    getPIDController().setSetpoint(angle);
   }
 
   // Called just before this Command runs the first time
@@ -43,7 +41,7 @@ public class ExtendIntake extends PIDCommand {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.intakeExtender.stopExtension();
+    Robot.drivetrain.stopDrive();
   }
 
   // Called when another command which requires one or more of the same
@@ -57,12 +55,11 @@ public class ExtendIntake extends PIDCommand {
 
   @Override
   protected double returnPIDInput() {
-    currentActuatorVoltage = Robot.intakeExtender.getActuatorPosition();
-    return currentActuatorVoltage;
+    return Robot.drivetrain.getGyroAngle();
   }
 
   @Override
   protected void usePIDOutput(double output) {
-    Robot.intakeExtender.hatchIntakeExtensionMotor.set(output);
+    Robot.drivetrain.arcadeDrive(0, output);
   }
 }

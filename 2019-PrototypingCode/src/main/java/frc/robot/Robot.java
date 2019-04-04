@@ -7,7 +7,8 @@
 
 package frc.robot;
 
-import edu.wpi.cscore.MjpegServer;
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSink;
 import edu.wpi.first.cameraserver.CameraServer;
@@ -21,8 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.robot.commands.DriveWithJoysticks;
-import frc.robot.commands.ExtendIntake;
-import frc.robot.commands.HatchIntakeUp;
+import frc.robot.commands.MoveIntake;
 import frc.robot.commands.SwapDriveDirection;
 import frc.robot.commands.HatchInitial;
 import frc.robot.commands.SwapIntake;
@@ -31,8 +31,8 @@ import frc.robot.subsystems.CargoIntake;
 import frc.robot.subsystems.Drivetrain;
 import frc.robot.subsystems.HatchIntake;
 import frc.robot.subsystems.IntakeExtender;
-
-
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.cscore.VideoMode;
 
 
 /**
@@ -51,13 +51,11 @@ public class Robot extends TimedRobot {
 
   public static DriveWithJoysticks drive;
   public static SwapDriveDirection swapDrive;
-  public static HatchIntakeUp upCommand;
   public static HatchInitial hatch;
   public static SwapIntake swapIntake;
   public static AutoDriveForward driveForward;
   
-  public static ExtendIntake extend;
-  public static ExtendIntake retract;
+  public static MoveIntake moveIntake;
 
   public static Trigger.ButtonScheduler upButton;
 
@@ -81,11 +79,11 @@ public class Robot extends TimedRobot {
   public static DigitalInput upperCargoLimitSwitch;
   public static final int IMG_WIDTH = 1;
   public static final int IMG_HEIGHT = 1;
-  public double centerX = 0; 
+  public static VideoMode videoMode;
   public boolean prevTrigger = false;
   public static final int   MIN_DISTANCE = 30;
   public static final int MAX_CURRENT_NEO = 40;
-
+  public static AHRS gyro;
   public final Object imgLock = new Object();
 
 
@@ -105,7 +103,7 @@ public class Robot extends TimedRobot {
 
     drive = new DriveWithJoysticks();
     swapDrive = new SwapDriveDirection();
-    extend = new ExtendIntake(1.75);
+    moveIntake = new MoveIntake(1.75);
     hatch = new HatchInitial();
     swapIntake = new SwapIntake();
 
@@ -114,13 +112,6 @@ public class Robot extends TimedRobot {
     chooser.addOption("Cargo", swapIntake);
     SmartDashboard.putData("Initial Chooser", chooser);
 
-    upButton = new Trigger.ButtonScheduler(){
-    
-      @Override
-      public void execute() {
-        upCommand.start();
-      }
-    };
 
     oi = new OI();
 
@@ -130,7 +121,7 @@ public class Robot extends TimedRobot {
     lowerHatchLimitSwitch = new DigitalInput(4);
     lowerCargoLimitSwitch = new DigitalInput(1);
     upperCargoLimitSwitch = new DigitalInput(2);
-
+    gyro = new AHRS(SPI.Port.kMXP);
 
     SmartDashboard.putData(actuatorPosition);
     
@@ -140,23 +131,17 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData(upperCargoLimitSwitch);
     SmartDashboard.putData(lowerCargoLimitSwitch);
     
+    SmartDashboard.putData(gyro);
+    
+    videoMode = new VideoMode(1, IMG_WIDTH, IMG_HEIGHT, 30);
+
     frontCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.frontCamera);
-		frontCamera.setResolution(IMG_WIDTH, IMG_HEIGHT);
+    frontCamera.setVideoMode(videoMode);
     frontCamera.setExposureAuto();
-    
 
-    MjpegServer mj = new MjpegServer("Camera1", 7072);
-    mj.setSource(frontCamera);
-    
     backCamera = CameraServer.getInstance().startAutomaticCapture(RobotMap.backCamera);
-		backCamera.setResolution(IMG_WIDTH, IMG_HEIGHT);
-		backCamera.setExposureAuto();
-    
-    MjpegServer c2 = new MjpegServer("Camera2", 7072);
-    mj.setSource(backCamera);
-
-    mj.close();
-    c2.close();
+		backCamera.setVideoMode(videoMode);
+    frontCamera.setExposureAuto();
 
   
   }
@@ -234,10 +219,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void disabledInit() {
-    retract = new ExtendIntake(0.94);
-    if(actuatorPosition.getVoltage() > 0.95){
-      retract.start();
-    }
     driveForward = new AutoDriveForward(1);
     driveForward.start();
   }

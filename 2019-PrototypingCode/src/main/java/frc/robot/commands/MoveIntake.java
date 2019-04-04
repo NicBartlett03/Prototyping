@@ -7,41 +7,43 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.PIDCommand;
 import frc.robot.Robot;
 
-/**
- * Add your docs here.
- */
-public class HatchIntakeDown extends Command {
+public class MoveIntake extends PIDCommand {
+
+  private double currentActuatorVoltage;
   
-
-  public HatchIntakeDown() {
-     requires(Robot.hatchIntake);
-
-    
+  public MoveIntake(double position) {
+   super(5, 0, -5);
+   requires(Robot.intakeExtender);
+    	
+    	getPIDController().setAbsoluteTolerance(.05);
+    	getPIDController().setSetpoint(position);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    super.initialize();
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.hatchIntake.intakeDown();
+    getPIDController().enable();
   }
 
-  // Called once after timeout
+  // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return getPIDController().onTarget();
   }
 
+  // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.hatchIntake.hatchIntakeStop();
+    Robot.intakeExtender.stopExtension();
   }
 
   // Called when another command which requires one or more of the same
@@ -49,5 +51,18 @@ public class HatchIntakeDown extends Command {
   @Override
   protected void interrupted() {
     end();
+    getPIDController().disable();
+    super.end();
+  }
+
+  @Override
+  protected double returnPIDInput() {
+    currentActuatorVoltage = Robot.intakeExtender.getActuatorPosition();
+    return currentActuatorVoltage;
+  }
+
+  @Override
+  protected void usePIDOutput(double output) {
+    Robot.intakeExtender.hatchIntakeExtensionMotor.set(output);
   }
 }

@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.DriveWithJoysticks;
 
@@ -83,7 +84,10 @@ public class Drivetrain extends Subsystem {
 
   public void setUseReverseDrive(boolean notCurrentDriveDirection){
     useReverseDrive = notCurrentDriveDirection;
-  
+  }
+
+  public double getGyroAngle(){
+    return Robot.gyro.getAngle();
   }
 
 }

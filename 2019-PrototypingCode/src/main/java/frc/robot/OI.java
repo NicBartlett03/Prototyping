@@ -11,13 +11,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.AutoMoveCargoToPosition;
-import frc.robot.commands.ExtendIntake;
-//import frc.robot.commands.HatchIntakeDown;
-//import frc.robot.commands.HatchIntakeUp;
-import frc.robot.commands.RetractIntake;
+import frc.robot.commands.MoveIntake;
 import frc.robot.commands.SwapDriveDirection;
 import frc.robot.commands.SwapIntake;
-import frc.robot.commands.VisionCommand;
+import frc.robot.commands.TurnRobot;
 
 
 /**
@@ -42,13 +39,13 @@ public class OI {
 
     
         Button copilotButtonY = new JoystickButton(coPilotController, RobotMap.joystickButtonY);
-        copilotButtonY.whenPressed(new ExtendIntake(1.75));
+        copilotButtonY.whenPressed(new MoveIntake(1.75));
 
         Button copilotButtonB = new JoystickButton(coPilotController, RobotMap.joystickButtonB);
-        copilotButtonB.whenPressed(new ExtendIntake(1.6));
+        copilotButtonB.whenPressed(new MoveIntake(1.6));
         
         Button copilotButtonA = new JoystickButton(coPilotController, RobotMap.joystickButtonA);
-        copilotButtonA.whenPressed(new RetractIntake(0.94));
+        copilotButtonA.whenPressed(new MoveIntake(0.94));
 
         Button copilotButtonX = new JoystickButton(coPilotController, RobotMap.joystickButtonX);
         copilotButtonX.whenPressed(new SwapIntake());
@@ -67,7 +64,13 @@ public class OI {
         pilotButtonY.whenPressed(new SwapDriveDirection());
 
         Button pilotButtonA = new JoystickButton(pilotController, RobotMap.joystickButtonA);
-        pilotButtonA.toggleWhenPressed(new VisionCommand());
+        pilotButtonA.whenPressed(new TurnRobot(Robot.drivetrain.getGyroAngle() + 180));
+
+        Button pilotButtonX = new JoystickButton(pilotController, RobotMap.joystickButtonX);
+        pilotButtonX.whenPressed(new TurnRobot(Robot.drivetrain.getGyroAngle() - 90));
+
+        Button pilotButtonB = new JoystickButton(pilotController, RobotMap.joystickButtonB);
+        pilotButtonB.whenPressed(new TurnRobot(Robot.drivetrain.getGyroAngle() + 90));
 
         
         

@@ -9,7 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import frc.robot.commands.SwapDriveDirection;
-import frc.robot.commands.ExtendIntake;
+import frc.robot.commands.MoveIntake;
 
 public class HatchInitial extends CommandGroup {
   /**
@@ -27,7 +27,7 @@ public class HatchInitial extends CommandGroup {
     // addSequential(new Command2());
     // Command1 and Command2 will run in parallel.
     addParallel(new SwapDriveDirection());
-    addSequential(new ExtendIntake(1.75));
+    addSequential(new MoveIntake(1.75));
 
     // A command group will require all of the subsystems that each member
     // would require.
